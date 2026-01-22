@@ -45,3 +45,8 @@ fd + fzf,ALT + C,Fuzzy-find a sub-directory and jump into it immediately.
 
 #Install Commands
 sudo pacman -S fzf zoxide bat fd eza tmux neovim git
+
+
+###Added the GNU stow
+stow .
+stow -D .
