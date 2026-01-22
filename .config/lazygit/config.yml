@@ -1,0 +1,30 @@
+gui:
+  # Sets the theme to something modern
+  theme:
+    activeBorderColor:
+      - '#ff79c6' # Pink
+      - bold
+    inactiveBorderColor:
+      - '#bd93f9' # Purple
+    searchingActiveBorderColor:
+      - '#8be9fd' # Cyan
+  
+  # Shows the command log at the bottom
+  showCommandLog: true
+  
+  # Use nerdy fonts if you have them installed
+  showIcons: true
+
+git:
+  # Use "side-by-side" diffing if your terminal is wide enough
+  paging:
+    colorArg: always
+    pager: delta --dark --paging=never
+
+# Custom keybindings
+keybinding:
+  universal:
+    prevItem-alt: 'u'
+    nextItem-alt: 'e'
+    prevBlock-alt: 'n'
+    nextBlock-alt: 'i'
