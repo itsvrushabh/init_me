@@ -24,63 +24,82 @@ if [ -d ~/.bashrc.d ]; then
 fi
 unset rc
 . "$HOME/.cargo/env"
-
 # --- Custom Bash Theme ---
 
-# Text Colors
+# Wrap color codes in \[ \] to prevent ghost line-wrapping issues
 Reset='\[\e[0m\]'
 Blue='\[\e[0;34m\]'
 Cyan='\[\e[0;36m\]'
 Green='\[\e[0;32m\]'
 Yellow='\[\e[0;33m\]'
 Purple='\[\e[0;35m\]'
-
-# Function to show Git Branch
-# parse_git_branch() {
-#      git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
-# }
+Red='\[\e[0;31m\]'
 
 parse_git_branch() {
-     # Check if we are in a git repo
-     if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-          local status="$(git status --porcelain 2>/dev/null)"
-          local branch="$(git b-name 2>/dev/null || git rev-parse --abbrev-ref HEAD 2>/dev/null)"
-          local marks=""
+    # Check if we are in a git repo
+    if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+        local status
+        status="$(git status --porcelain 2>/dev/null)"
+        # Use git branch or rev-parse for the name
+        local branch
+        branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
+        local marks=""
 
-          # Check for uncommitted changes
-          if echo "$status" | grep -q '^ [MADRCU]'; then
-               marks+=" ✚" # Unstaged changes
-          fi
-          # Check for staged changes
-          if echo "$status" | grep -q '^[MADRCU]'; then
-               marks+=" ●" # Staged changes
-          fi
-          # Check for untracked files
-          if echo "$status" | grep -q '??'; then
-               marks+=" …" # Untracked files
-          fi
-          # Check if ahead of remote
-          if git status -sb 2>/dev/null | grep -q 'ahead'; then
-               marks+=" ↑" # Local is ahead
-          fi
+        # Check for changes
+        [[ "$status" =~ [[:space:]][MADRCU] ]] && marks+=" ✚" # Unstaged
+        [[ "$status" =~ ^[MADRCU] ]]           && marks+=" ●" # Staged
+        [[ "$status" =~ \?\? ]]                && marks+=" …" # Untracked
+        [[ $(git status -sb 2>/dev/null) =~ "ahead" ]] && marks+=" ↑"
 
-          echo -e " ($branch$marks)"
-     fi
+        # Note: We return just the text; PS1 will handle the color
+        echo -n " ($branch$marks)"
+    fi
 }
 
-# The enhanced function (from above)
+# # --- Custom Bash Theme ---
+# 
+# # Text Colors
+# Reset='\[\e[0m\]'
+# Blue='\[\e[0;34m\]'
+# Cyan='\[\e[0;36m\]'
+# Green='\[\e[0;32m\]'
+# Yellow='\[\e[0;33m\]'
+# Purple='\[\e[0;35m\]'
+# 
+# # Function to show Git Branch
+# # parse_git_branch() {
+# #      git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+# # }
+# 
 # parse_git_branch() {
+#      # Check if we are in a git repo
 #      if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
 #           local status="$(git status --porcelain 2>/dev/null)"
-#           local branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
+#           local branch="$(git b-name 2>/dev/null || git rev-parse --abbrev-ref HEAD 2>/dev/null)"
 #           local marks=""
-#           [[ "$status" =~ [[:space:]][MADRCU] ]] && marks+=" ✚"
-#           [[ "$status" =~ ^[MADRCU] ]] && marks+=" ●"
-#           [[ "$status" =~ \?\? ]] && marks+=" …"
-#           [[ $(git status -sb 2>/dev/null) =~ ahead ]] && marks+=" ↑"
-#           echo -e " \[\e[0;35m\]( \[\e[0;33m\]$branch$marks \[\e[0;35m\])"
+# 
+#           # Check for uncommitted changes
+#           if echo "$status" | grep -q '^ [MADRCU]'; then
+#                marks+=" ✚" # Unstaged changes
+#           fi
+#           # Check for staged changes
+#           if echo "$status" | grep -q '^[MADRCU]'; then
+#                marks+=" ●" # Staged changes
+#           fi
+#           # Check for untracked files
+#           if echo "$status" | grep -q '??'; then
+#                marks+=" …" # Untracked files
+#           fi
+#           # Check if ahead of remote
+#           if git status -sb 2>/dev/null | grep -q 'ahead'; then
+#                marks+=" ↑" # Local is ahead
+#           fi
+# 
+#           echo -e " ($branch$marks)"
 #      fi
 # }
+# 
+# 
 
 # Define Icons (You can replace these with any emoji or symbol)
 SuccessIcon="✔"
@@ -161,4 +180,8 @@ fi
 # export PS1="${Blue}\w${Yellow}\$(parse_git_branch)${Reset} "
 
 # Final PS1
-export PS1="$(parse_git_branch)${Reset} ${Cyan}\W "
+# export PS1="${Green}$(parse_git_branch)${Reset} ${Cyan}\W ${Reset}"
+
+# PS1: [Git Info (Purple)] [Folder (Cyan)] [Symbol]
+# We use the literal variable names so they are interpreted every time
+export PS1="${Purple}\$(parse_git_branch)${Reset} ${Cyan}\W ${Reset}\$ "
