@@ -1,0 +1,11 @@
+# ~/.config/yazi/keymap.toml
+
+[[manager.prepend_keymap]]
+on   = [ "g", "z" ]
+run  = "plugin zoxide"
+desc = "Jump to a directory using zoxide"
+
+[[manager.prepend_keymap]]
+on   = [ "C" ]
+run  = "plugin chmod"
+desc = "Chmod on selected files"

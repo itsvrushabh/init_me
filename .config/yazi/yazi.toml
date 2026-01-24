@@ -1,0 +1,31 @@
+# ~/.config/yazi/yazi.toml
+
+[manager]
+ratio          = [ 1, 3, 4 ] # Column widths: Parent, Current, Preview
+sort_by        = "alphabetical"
+sort_sensitive = false
+sort_reverse   = false
+sort_dir_first = true
+show_hidden    = true # You'll likely want this for your dotfiles
+
+[preview]
+tab_size        = 2
+max_width       = 600
+max_height      = 900
+cache_dir       = ""
+
+[opener]
+edit = [
+    { run = 'nvim "$@"', block = true, desc = "Edit with Neovim" }
+]
+play = [
+    { run = 'mpv "$@"', orphan = true, desc = "Play with MPV" }
+]
+
+[open]
+rules = [
+    { name = "*.txt", use = "edit" },
+    { name = "*.rs",  use = "edit" },
+    { name = "*.lua", use = "edit" },
+    { mime = "video/*", use = "play" }
+]

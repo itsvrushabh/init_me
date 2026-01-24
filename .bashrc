@@ -1,4 +1,13 @@
 # .bashrc
+# Function for yazi
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
@@ -24,115 +33,6 @@ if [ -d ~/.bashrc.d ]; then
 fi
 unset rc
 . "$HOME/.cargo/env"
-# --- Custom Bash Theme ---
-
-# Wrap color codes in \[ \] to prevent ghost line-wrapping issues
-Reset='\[\e[0m\]'
-Blue='\[\e[0;34m\]'
-Cyan='\[\e[0;36m\]'
-Green='\[\e[0;32m\]'
-Yellow='\[\e[0;33m\]'
-Purple='\[\e[0;35m\]'
-Red='\[\e[0;31m\]'
-
-parse_git_branch() {
-    # Check if we are in a git repo
-    if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-        local status
-        status="$(git status --porcelain 2>/dev/null)"
-        # Use git branch or rev-parse for the name
-        local branch
-        branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
-        local marks=""
-
-        # Check for changes
-        [[ "$status" =~ [[:space:]][MADRCU] ]] && marks+=" ✚" # Unstaged
-        [[ "$status" =~ ^[MADRCU] ]]           && marks+=" ●" # Staged
-        [[ "$status" =~ \?\? ]]                && marks+=" …" # Untracked
-        [[ $(git status -sb 2>/dev/null) =~ "ahead" ]] && marks+=" ↑"
-
-        # Note: We return just the text; PS1 will handle the color
-        echo -n " ($branch$marks)"
-    fi
-}
-
-# # --- Custom Bash Theme ---
-# 
-# # Text Colors
-# Reset='\[\e[0m\]'
-# Blue='\[\e[0;34m\]'
-# Cyan='\[\e[0;36m\]'
-# Green='\[\e[0;32m\]'
-# Yellow='\[\e[0;33m\]'
-# Purple='\[\e[0;35m\]'
-# 
-# # Function to show Git Branch
-# # parse_git_branch() {
-# #      git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
-# # }
-# 
-# parse_git_branch() {
-#      # Check if we are in a git repo
-#      if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-#           local status="$(git status --porcelain 2>/dev/null)"
-#           local branch="$(git b-name 2>/dev/null || git rev-parse --abbrev-ref HEAD 2>/dev/null)"
-#           local marks=""
-# 
-#           # Check for uncommitted changes
-#           if echo "$status" | grep -q '^ [MADRCU]'; then
-#                marks+=" ✚" # Unstaged changes
-#           fi
-#           # Check for staged changes
-#           if echo "$status" | grep -q '^[MADRCU]'; then
-#                marks+=" ●" # Staged changes
-#           fi
-#           # Check for untracked files
-#           if echo "$status" | grep -q '??'; then
-#                marks+=" …" # Untracked files
-#           fi
-#           # Check if ahead of remote
-#           if git status -sb 2>/dev/null | grep -q 'ahead'; then
-#                marks+=" ↑" # Local is ahead
-#           fi
-# 
-#           echo -e " ($branch$marks)"
-#      fi
-# }
-# 
-# 
-
-# Define Icons (You can replace these with any emoji or symbol)
-SuccessIcon="✔"
-FailureIcon="✘"
-
-# Function to determine which icon to show
-prompt_status() {
-    local exit_code=$?
-    if [ $exit_code -eq 0 ]; then
-        echo -e "$Green$SuccessIcon" # Green check
-    else
-        echo -e "$Red$FailureIcon" # Red cross
-    fi
-}
-
-spinner() {
-    local pid=$1
-    local delay=0.1
-    local spinstr='|/-\'
-    while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
-        local temp=${spinstr#?}
-        printf " [%c]  " "$spinstr"
-        local spinstr=$temp${spinstr%"$temp"}
-        sleep $delay
-        printf "\b\b\b\b\b\b"
-    done
-    printf "    \b\b\b\b"
-}
-
-# Usage: 
-# sleep 5 & spinner $!
-
-
 
 # Example aliases
 alias bashconfig="mate ~/.bashrc"
@@ -140,6 +40,8 @@ alias bashconfig="mate ~/.bashrc"
 export LANGUAGE=en_IN.UTF-8
 . "$HOME/.cargo/env"
 
+# Ping gping
+alias ping="gping"
 
 # --- 1. Zoxide (Smarter 'cd') ---
 eval "$(zoxide init bash)"
@@ -177,6 +79,8 @@ if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
     tmux attach-session -t default || tmux new-session -s default
 fi
 
+
+
 # export PS1="${Blue}\w${Yellow}\$(parse_git_branch)${Reset} "
 
 # Final PS1
@@ -184,4 +88,5 @@ fi
 
 # PS1: [Git Info (Purple)] [Folder (Cyan)] [Symbol]
 # We use the literal variable names so they are interpreted every time
-export PS1="${Purple}\$(parse_git_branch)${Reset} ${Cyan}\W ${Reset}\$ "
+# export PS1="${Purple}\$(parse_git_branch)${Reset} ${Cyan}\W ${Reset}\$ "
+eval "$(starship init bash)"

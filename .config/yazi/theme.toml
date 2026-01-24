@@ -1,0 +1,49 @@
+# ~/.config/yazi/theme.toml
+
+[manager]
+# Border colors (Cyan to match your path)
+border_symbol = "│"
+border_style  = { fg = "cyan" }
+
+# Highlighting the active file (Purple to match your Git branch)
+hovered       = { fg = "black", bg = "magenta", bold = true }
+selection     = { fg = "black", bg = "yellow", bold = true }
+
+[status]
+# The bar at the bottom
+separator_open  = ""
+separator_close = ""
+
+[status.left]
+# Shows your mode (Normal, Select) in Green
+style_gn = { fg = "black", bg = "green", bold = true }
+# Shows the current file name in Cyan
+style_main = { fg = "black", bg = "cyan", bold = true }
+
+[status.right]
+# Permissions and Progress in Purple
+style_main = { fg = "black", bg = "magenta", bold = true }
+
+[filetype]
+rules = [
+    # Rust files (Orange/Yellow)
+    { name = "*.rs", fg = "yellow" },
+    # Configuration files (Cyan)
+    { name = "*.toml", fg = "cyan" },
+    { name = "*.lua", fg = "blue" },
+    # Git related (Purple)
+    { name = ".git/*", fg = "magenta" },
+    # Directories (Blue)
+    # { is = "dir", fg = "blue", bold = true }
+]
+
+[input]
+# The style for the input box (e.g., when renaming)
+border   = { fg = "magenta" }
+title    = { fg = "magenta" }
+value    = { fg = "white" }
+
+[select]
+# The style for the selection box
+border   = { fg = "cyan" }
+active   = { fg = "magenta", bold = true }
