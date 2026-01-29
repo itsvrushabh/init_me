@@ -44,7 +44,6 @@ export LANGUAGE=en_IN.UTF-8
 alias ping="gping"
 
 # --- 1. Zoxide (Smarter 'cd') ---
-eval "$(zoxide init bash)"
 alias cd="z"
 alias ci="z -i" # Interactive jump using fzf
 
@@ -73,7 +72,6 @@ export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --border \
 
 # --- 5. FZF Keybindings & Completion ---
 # Load official Arch Linux integration for Bash
-eval "$(fzf --bash)"
 # Auto-start tmux
 if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
     tmux attach-session -t default || tmux new-session -s default
@@ -90,3 +88,5 @@ fi
 # We use the literal variable names so they are interpreted every time
 # export PS1="${Purple}\$(parse_git_branch)${Reset} ${Cyan}\W ${Reset}\$ "
 eval "$(starship init bash)"
+eval "$(fzf --bash)"
+eval "$(zoxide init bash)"
