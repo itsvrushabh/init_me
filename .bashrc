@@ -38,6 +38,7 @@ unset rc
 alias bashconfig="mate ~/.bashrc"
 
 export LANGUAGE=en_IN.UTF-8
+export LANG=en_IN.UTF-8
 . "$HOME/.cargo/env"
 
 # Ping gping
@@ -73,17 +74,12 @@ export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --border \
 # --- 5. FZF Keybindings & Completion ---
 # Load official Arch Linux integration for Bash
 # Auto-start tmux
-if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
-    tmux attach-session -t default || tmux new-session -s default
-fi
-
-
-
+# if command -v tmux -u &> /dev/null && [ -z "$TMUX" ]; then
+#     tmux -u attach-session -t default || tmux -u new-session -s default
+# fi
 # export PS1="${Blue}\w${Yellow}\$(parse_git_branch)${Reset} "
-
 # Final PS1
 # export PS1="${Green}$(parse_git_branch)${Reset} ${Cyan}\W ${Reset}"
-
 # PS1: [Git Info (Purple)] [Folder (Cyan)] [Symbol]
 # We use the literal variable names so they are interpreted every time
 # export PS1="${Purple}\$(parse_git_branch)${Reset} ${Cyan}\W ${Reset}\$ "

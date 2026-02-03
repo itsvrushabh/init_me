@@ -39,3 +39,24 @@ luac.out
 *.x86_64
 *.hex
 
+# Ignore Dots files
+cachyos
+dconf
+foot
+gh
+go
+micro
+mozilla
+pulse
+qt5ct
+wofi
+qt5ct
+wofi
+qt5ct
+wofi
+qt5ct
+wofi
+qt5ct
+wofi
+session
+wlogout

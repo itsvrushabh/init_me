@@ -579,7 +579,7 @@ return {
 		-- ════════════════════════════════════════════════════════════════════
 		-- <leader>w = Windows
 		-- ════════════════════════════════════════════════════════════════════
-		{ "<leader>wd", "<C-w>c", desc = "Close Window" },
+		{ "<leader>wq", "<C-w>c", desc = "Close Window" },
 		{ "<leader>ws", "<C-w>s", desc = "Split Horizontal" },
 		{ "<leader>wv", "<C-w>v", desc = "Split Vertical" },
 		{ "<leader>wh", "<C-w>h", desc = "Go Left" },
