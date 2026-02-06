@@ -73,10 +73,6 @@ export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --border \
 
 # --- 5. FZF Keybindings & Completion ---
 # Load official Arch Linux integration for Bash
-# Auto-start tmux
-# if command -v tmux -u &> /dev/null && [ -z "$TMUX" ]; then
-#     tmux -u attach-session -t default || tmux -u new-session -s default
-# fi
 # export PS1="${Blue}\w${Yellow}\$(parse_git_branch)${Reset} "
 # Final PS1
 # export PS1="${Green}$(parse_git_branch)${Reset} ${Cyan}\W ${Reset}"
@@ -86,3 +82,7 @@ export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --border \
 eval "$(starship init bash)"
 eval "$(fzf --bash)"
 eval "$(zoxide init bash)"
+# Auto-start tmux
+if command -v tmux -u &> /dev/null && [ -z "$TMUX" ]; then
+    tmux new -A -s main
+fi
